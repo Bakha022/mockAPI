@@ -9,8 +9,6 @@ import request from '../services/request'
 
 const ProductsPage = () => {
 	const [products, setProducts] = useState([])
-	const [total, setTotal] = useState(0)
-	// const [activePage, setActigePage] = useState(1)
 	const [loading, setLoading] = useState(false)
 
 	const { id } = useParams()
@@ -27,7 +25,6 @@ const ProductsPage = () => {
 					params: params,
 				})
 				setProducts(data)
-				setTotal(data.length)
 			} finally {
 				setLoading(false)
 			}
@@ -36,9 +33,10 @@ const ProductsPage = () => {
 		getProducts()
 	}, [params.page])
 
-	const handlePageClick = e => {
+	console.log(products.length);
 	
-		const selectedPage = e.selected + 1 
+	const handlePageClick = e => {
+		const selectedPage = e.selected + 1
 		setParams(prevParams => ({
 			...prevParams,
 			page: selectedPage,
@@ -59,8 +57,8 @@ const ProductsPage = () => {
 					breakLabel='...'
 					nextLabel='next >'
 					onPageChange={handlePageClick}
-					pageRangeDisplayed={total}
-					pageCount={4}
+					pageRangeDisplayed={55}
+					pageCount={Math.ceil(products.length / LIMIT)}
 					previousLabel='< previous'
 					renderOnZeroPageCount={null}
 					className='pagination user-select-none'
