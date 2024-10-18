@@ -17,6 +17,7 @@
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
+    "react-lazy-load-image-component": "^1.6.2",
     "react-loading-indicators": "^1.0.0",
     "react-router-dom": "^6.27.0",
     "react-toastify": "^10.0.6",
