@@ -7,9 +7,6 @@ const ProductSchema = Yup.object().shape({
 		.typeError('Age must be a number')
 		.required('Image is required!'),
 	description: Yup.string.required('Description  is required!'),
-	category: Yup.string()
-		.oneOf(['One', 'Two', 'Three', 'Fourth'], 'Invalid category')
-		.required('Category is required!'),
 })
 
 export default ProductSchema

@@ -4,6 +4,7 @@ import Layout from './components/Layout'
 import { TOKEN } from './constants'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
+import NotFoundPage from './pages/NotFoundPage'
 import ProductsPage from './pages/ProductsPage'
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
 						/>
 						<Route path='categories/:id' element={<ProductsPage />} />
 					</Route>
+					<Route path='*' element={<NotFoundPage />} />
 				</Routes>
 			</BrowserRouter>
 		</>
