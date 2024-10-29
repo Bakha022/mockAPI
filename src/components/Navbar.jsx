@@ -14,7 +14,7 @@ const Navbar = () => {
 					variant='warning'
 					className='text-white'
 				>
-					Log In
+					Log Out
 				</Button>
 			</div>
 		</div>
