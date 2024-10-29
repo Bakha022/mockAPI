@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useEffect, useState } from 'react'
 import { Button, Container, Form, Modal, Row } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import ReactPaginate from 'react-paginate'
@@ -6,7 +7,9 @@ import { Link, useParams } from 'react-router-dom'
 import Loading from '../components/Loading'
 import ProductItem from '../components/ProductItem'
 import { LIMIT } from '../constants'
+import productSchema from '../schemas/productSchema'
 import request from '../services/request'
+
 const ProductsPage = () => {
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(false)
@@ -38,6 +41,13 @@ const ProductsPage = () => {
 		getProducts()
 	}, [params.page])
 
+	const {
+		register,
+		formState: { errors },
+		handleSubmit,
+		reset,
+	} = useForm({ resolver: yupResolver(productSchema) })
+
 	const handlePageClick = e => {
 		const selectedPage = e.selected + 1
 		setParams(prevParams => ({
@@ -49,13 +59,17 @@ const ProductsPage = () => {
 	const [show, setShow] = useState(false)
 
 	const handleClose = () => setShow(false)
-	const handleShow = () => setShow(true)
+	const handleShow = () => {
+		setShow(true)
+		reset()
+	}
 
-	const {
-		register,
-		formState: { errors },
-		handleSubmit,
-	} = useForm()
+	
+
+	const onSubmit = data => {
+		setShow(false)
+		console.log(data)
+	}
 
 	return (
 		<Container className='mt-5'>
@@ -87,39 +101,69 @@ const ProductsPage = () => {
 				<div className='mb-5'>
 					<Link to={'/'}>Go to Home</Link>
 				</div>
-				<Form>
-					<Modal show={show} onHide={handleClose}>
+				<Modal show={show} onHide={handleClose}>
+					<Form onSubmit={handleSubmit(onSubmit)}>
 						<Modal.Header closeButton>
 							<Modal.Title>Form by Product added</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
 							<Form.Group className='mb-3'>
 								<Form.Label>Product name</Form.Label>
-								<Form.Control type='text' placeholder='Product name' />
+								<Form.Control
+									{...register('name')}
+									type='text'
+									placeholder='Product name'
+								/>
+								{errors.name ? (
+									<p className='my-3 text-danger'>{errors.name.message}</p>
+								) : null}
 							</Form.Group>
 							<Form.Group className='mb-3'>
 								<Form.Label>Product price</Form.Label>
-								<Form.Control type='number' placeholder='Product price' />
+								<Form.Control
+									{...register('price')}
+									type='number'
+									placeholder='Product price'
+								/>
+								{errors.price ? (
+									<p className='my-3 text-danger'>{errors.price.message}</p>
+								) : null}
 							</Form.Group>
 							<Form.Group className='mb-3'>
 								<Form.Label>Product image</Form.Label>
-								<Form.Control type='text' placeholder='Product image' />
+								<Form.Control
+									{...register('image')}
+									type='text'
+									placeholder='Product image'
+								/>
+								{errors.image ? (
+									<p className='my-3 text-danger'>{errors.image.message}</p>
+								) : null}
 							</Form.Group>
 							<Form.Group className='mb-3'>
 								<Form.Label>Product description</Form.Label>
-								<Form.Control type='text' placeholder='Product description' />
+								<Form.Control
+									{...register('description')}
+									type='text'
+									placeholder='Product description'
+								/>
+								{errors.description ? (
+									<p className='my-3 text-danger'>
+										{errors.description.message}
+									</p>
+								) : null}
 							</Form.Group>
 						</Modal.Body>
 						<Modal.Footer>
 							<Button variant='secondary' onClick={handleClose}>
 								Close
 							</Button>
-							<Button variant='primary' onClick={handleClose}>
+							<Button type='submit' variant='primary'>
 								Add Products
 							</Button>
 						</Modal.Footer>
-					</Modal>
-				</Form>
+					</Form>
+				</Modal>
 			</>
 			<Row className='gap-5 mb-3'>
 				{loading ? (
