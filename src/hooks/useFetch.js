@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import request from '../services/request'
 
-const useFetch = url => {
+const useFetch = ({ url, params, initialData = null }) => {
 	const [loading, setLoading] = useState(false)
-	const [data, setData] = useState([])
+	const [data, setData] = useState(initialData)
 	useEffect(() => {
-		const getCategories = async () => {
+		const getData = async () => {
 			try {
 				setLoading(true)
-				const { data } = await request.get(url)
+				const { data } = await request.get(url, {
+					params: params ? JSON.parse(params || '') : {},
+				})
 				setData(data)
 			} catch (error) {
 				console.log(error)
@@ -17,8 +19,8 @@ const useFetch = url => {
 			}
 		}
 
-		getCategories()
-	}, [])
+		getData()
+	}, [url, params])
 	return { loading, data }
 }
 

@@ -6,7 +6,12 @@ const ProductItem = ({ name, image, price, description, id, categoryId }) => {
 	return (
 		<Col xs={12} sm={6} md={4} lg={3} xl={2}>
 			<Card style={{ width: '14rem' }}>
-				<LazyLoadImage src={image} />
+				<LazyLoadImage
+					style={{ width: '14rem' }}
+					alt={`${name} image`}
+					effect='blur'
+					src={image}
+				/>
 				<Card.Body>
 					<span className='badge text-bg-danger text-light mb-2 me-3'>
 						Category: {categoryId}

@@ -1,14 +1,28 @@
-import React from 'react'
-import { Row } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Button, Form, InputGroup, Row } from 'react-bootstrap'
 import useFetch from '../hooks/useFetch'
 import CategoryItem from './CaregoryItem'
 import Loading from './Loading'
 
 const Categories = () => {
-	const { loading, data: category } = useFetch('categories')
+	const [search, setSearch] = useState('')
+	const params = JSON.stringify({ search })
+	const { loading, data: category } = useFetch({
+		url: 'categories',
+		initialData: [],
+		params,
+	})
 	return (
 		<div className='mt-3'>
-			<Row className='justify-content-between gap-1'>
+			<InputGroup className='mb-3'>
+				<Form.Control
+					onChange={e => setSearch(e.target.value)}
+					value={search}
+					placeholder='Searching of Category'
+				/>
+				<Button>Add Categories</Button>
+			</InputGroup>
+			<Row className='gap-5 my-5'>
 				{loading ? (
 					<Loading />
 				) : (
