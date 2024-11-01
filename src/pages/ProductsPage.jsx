@@ -14,6 +14,7 @@ const ProductsPage = () => {
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(false)
 	const [total, setTotal] = useState(0)
+	const [search, setSearch] = useState('')
 
 	const { id } = useParams()
 	const [params, setParams] = useState({
@@ -64,11 +65,14 @@ const ProductsPage = () => {
 		reset()
 	}
 
-	
-
 	const onSubmit = data => {
 		setShow(false)
 		console.log(data)
+	}
+
+	const handleSearch = async e => {
+		setSearch(e.target.value)
+		console.log(search)
 	}
 
 	return (
@@ -80,6 +84,8 @@ const ProductsPage = () => {
 							className='mb-3'
 							type='text'
 							placeholder='Searching by Product'
+							value={search}
+							onChange={handleSearch}
 						/>
 					</div>
 					<div className='col-4'>

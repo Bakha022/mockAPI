@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Col } from 'react-bootstrap'
+import { Button, Card, Col } from 'react-bootstrap'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const ProductItem = ({ name, image, price, description, id, categoryId }) => {
@@ -24,6 +24,10 @@ const ProductItem = ({ name, image, price, description, id, categoryId }) => {
 					<span className='badge text-bg-primary text-light mb-2'>
 						Price: {price}
 					</span>
+					<div className='d-flex gap-2 mt-y align-items-center' >
+						<Button variant='danger'>Delete</Button>
+						<Button variant='warning'>Edit</Button>
+					</div>
 				</Card.Body>
 			</Card>
 		</Col>
