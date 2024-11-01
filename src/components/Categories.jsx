@@ -4,16 +4,22 @@ import { Button, Form, InputGroup, Modal, Row } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import useFetch from '../hooks/useFetch'
 import categorySchema from '../schemas/categorySchema'
+import request from '../services/request'
 import CategoryItem from './CaregoryItem'
 import Loading from './Loading'
 
 const Categories = () => {
 	const [search, setSearch] = useState('')
 	const [show, setShow] = useState(false)
+	const [seleceted, setSelected] = useState(null)
 
 	const params = JSON.stringify({ search })
 
-	const { loading, data: category } = useFetch({
+	const {
+		loading,
+		data: category,
+		refetch,
+	} = useFetch({
 		url: 'categories',
 		initialData: [],
 		params,
@@ -26,18 +32,71 @@ const Categories = () => {
 		formState: { errors },
 	} = useForm({
 		resolver: yupResolver(categorySchema),
+		defaultValues: {
+			name: '',
+			image: '',
+			products: '',
+		},
 	})
 
-	const handleClose = () => setShow(false)
+	const handleClose = () => {
+		setShow(false)
+		setSelected(null)
+		reset({
+			name: '',
+			image: '',
+			products: '',
+		})
+	}
 	const handleShow = () => {
+		reset({
+			name: '',
+			image: '',
+			products: '',
+		})
+
+		setSelected(null)
 		setShow(true)
-		reset()
 	}
 
-	const onSubmit = data => {
-		setShow(false)
-		console.log(data)
+	const onSubmit = async data => {
+		try {
+			if (seleceted === null) {
+				await request.post('categories', data)
+			} else {
+				await request.put(`categories/${seleceted}`, data)
+			}
+			handleClose()
+			refetch()
+		} catch (error) {
+			console.log(error)
+		}
+		reset({
+			name: '',
+			image: '',
+			products: '',
+		})
 	}
+	const handleDelete = async id => {
+		try {
+			await request.delete(`categories/${id}`)
+			refetch()
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
+	const handleEdit = async id => {
+		try {
+			const { data } = await request.get(`categories/${id}`)
+			reset(data)
+		} catch (error) {
+			console.log(error)
+		}
+		setShow(true)
+		setSelected(id)
+	}
+
 	return (
 		<>
 			<div className='mt-3'>
@@ -53,7 +112,14 @@ const Categories = () => {
 					{loading ? (
 						<Loading />
 					) : (
-						category?.map(item => <CategoryItem key={item.id} {...item} />)
+						category?.map(item => (
+							<CategoryItem
+								handleDelete={handleDelete}
+								handleEdit={handleEdit}
+								key={item.id}
+								{...item}
+							/>
+						))
 					)}
 				</Row>
 			</div>
@@ -102,7 +168,7 @@ const Categories = () => {
 							Close
 						</Button>
 						<Button type='submit' variant='primary'>
-							Save Changes
+							{seleceted == null ? 'Add' : 'Save chages'} category
 						</Button>
 					</Modal.Footer>
 				</Form>
