@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Card, Col } from 'react-bootstrap'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 
-const ProductItem = ({ name, image, price, description, id, categoryId }) => {
+const ProductItem = ({ name, image, price, description, id, categoryId, handleDeleted, handleEdit }) => {
 	return (
 		<Col xs={12} sm={6} md={4} lg={3} xl={2}>
 			<Card style={{ width: '14rem' }}>
@@ -25,8 +25,8 @@ const ProductItem = ({ name, image, price, description, id, categoryId }) => {
 						Price: {price}
 					</span>
 					<div className='d-flex gap-2 mt-y align-items-center' >
-						<Button variant='danger'>Delete</Button>
-						<Button variant='warning'>Edit</Button>
+						<Button onClick={()=> handleDeleted(id)} variant='danger'>Delete</Button>
+						<Button onClick={()=> handleEdit(id)} variant='warning'>Edit</Button>
 					</div>
 				</Card.Body>
 			</Card>

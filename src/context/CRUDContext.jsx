@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { createContext, useContext } from 'react'
 
 
 
-const CRUDContext = () => {
+
+
+
+export const CRUDContext = createContext()
+
+
+const CRUDContextProvider = ({children}) => {
+
+
+
+
+
+
+	const state = {}
+
 	return (
-		<div>CRUDContext</div>
+		<CRUDContext.Provider value={state}>{children}</CRUDContext.Provider>
 	)
 }
 
-export default CRUDContext
+export default CRUDContextProvider
